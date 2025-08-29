@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --font-outfit: "Outfit", sans-serif;
+
+  --text-course-details-heading-small: 1.625rem;   /* 26px / 36px */
+  --text-course-details-heading-large: 2.25rem;    /* 36px / 44px */
+  --text-home-heading-small: 1.75rem;              /* 28px / 34px */
+  --text-home-heading-large: 3rem;                 /* 48px / 56px */
+  --text-default: 0.9375rem;                       /* 15px / 21px */
+
+ /* Max width */
+  
+  --max-width-course-card: var(--container-xl);
+
+  /* Shadow */
+  --shadow-custom-card: 0px 4px 15px 2px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Base styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Rich text styles */
+.rich-text { font-size: 15px; color: #7A7B7D; }
+.rich-text p { margin-bottom: 16px; }
+.rich-text h1 { font-size: 36px; font-weight: 800; color: #252525; margin: 32px 0; }
+.rich-text h2 { font-size: 22px; font-weight: 700; color: #252525; margin: 24px 0; }
+.rich-text h3 { font-size: 18px; font-weight: 600; color: #333333; margin: 20px 0; }
+.rich-text h4 { font-size: 16px; font-weight: 500; color: #444444; margin: 16px 0; }
+.rich-text h5 { font-size: 14px; font-weight: 400; color: #555555; margin: 12px 0; }
+.rich-text h6 { font-size: 12px; font-weight: 400; color: #666666; margin: 8px 0; }
+.rich-text strong { font-weight: 700; }
+.rich-text ol { margin-left: 30px; list-style-type: decimal; }
+.rich-text ul { margin-left: 30px; list-style-type: disc; }
+.rich-text li { margin-bottom: 8px; }
