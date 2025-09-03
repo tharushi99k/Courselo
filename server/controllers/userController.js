@@ -26,7 +26,7 @@ export const userEnrolledcourses = async (req, res)=>{
         const userId = req.auth.userId
         const userData = await User.findById(userId).populate('enrolledCourses')
 
-        res.json({success:true, enrolledcourses: userData.enrolledCourses})
+        res.json({success:true, enrolledCourses: userData.enrolledCourses })
 
     }catch (error){
         res.json({success:false, message:error.message})
@@ -115,17 +115,35 @@ export const updateUserCourseProgress = async (req, res)=>{
 }
 
 //get user course progress
-export const getUserCourseProgress =async (req, res) =>{
-    try{
-         const userId = req.auth.userId
-        const {courseId}= req.body
-        const progressData = await CourseProgress.findOne({userId, courseId })
-        res.json({success: true, progressData})
+export const getUserCourseProgress = async (req, res) => {
+  try {
+    const userId = req.auth.userId;
+    const purchases = await Purchase.find({ userId, status: 'Pending' });
+    
+    const enrolledCourses = await Promise.all(
+      purchases.map(async (p) => {
+        const course = await Course.findById(p.courseId);
+        return course; // return full course object
+      })
+    );
 
-    }catch(error){
+    res.json({ success: true, enrolledCourses });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+// export const getUserCourseProgress =async (req, res) =>{
+//     try{
+//          const userId = req.auth.userId
+//         const {courseId}= req.body
+//         const progressData = await CourseProgress.findOne({userId, courseId })
+//         res.json({success: true, progressData})
 
-    }
-}
+//     }catch(error){
+
+//     }
+// }
 
 //Add User Ratings to vourse
 

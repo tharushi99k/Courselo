@@ -17,3 +17,6 @@ educatorRouter.get('/enrolled-students', protectEducator, getEnrolledStudentsDat
 
 
 export default educatorRouter;
+
+// http://localhost:5000/api/educator/add-course
+// http://localhost:5000/api/educator/course

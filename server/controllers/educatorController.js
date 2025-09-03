@@ -1,8 +1,8 @@
 import {clerkClient} from '@clerk/express'
 import {v2 as cloudinary} from 'cloudinary'
-import course from '../models/Course.js'
 import Course from '../models/Course.js'
 import { Purchase } from '../models/Purchase.js'
+import User from '../models/User.js'
 
 export const updateRoleToEducator = async (req, res) =>{
     try{
@@ -41,10 +41,11 @@ export const addcourse =async (req,res)=>{
         await newCourse.save()
 
         res.json({ success:true, message: 'Course Added'})
+        
 
 
     }catch (error){
-        res.json({sucess:false, message: error.message })
+        res.json({success:false, message: error.message })
 
     }
 }
@@ -53,7 +54,7 @@ export const addcourse =async (req,res)=>{
 export const getEducatorCourses = async (req, res)=>{
     try {
         const educator = req.auth.userId
-        const courses = await course.find({educator})
+        const courses = await Course.find({educator})
         res.json({ success: true, courses})
     }   catch (error){
         res.json({ success: false, message: error.message })

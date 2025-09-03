@@ -1,9 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import uniqid from 'uniqid';
 import Quill from 'quill';
 import { assets } from '../../assets/assets';
+import { AppContext } from '../../context/AppContext';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const AddCourse = () => {
+  const { backendUrl, getToken} = useContext(AppContext)
   const quillRef = useRef(null);
   const editorRef = useRef(null)
 
@@ -71,7 +75,7 @@ const AddCourse = () => {
         if(chapter.chapterId === currentChapterId){
           const newLecture = {
             ...lectureDetails,
-            lectureOrder:chapter.chapterContent.lenght > 0 ? chapter.chapterContent.slice(-1)[0].lectureOrder + 1 : 1,
+            lectureOrder:chapter.chapterContent.length > 0 ? chapter.chapterContent.slice(-1)[0].lectureOrder + 1 : 1,
             lectureId: uniqid()
           };
           chapter.chapterContent.push(newLecture);
@@ -89,7 +93,42 @@ const AddCourse = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    try {
+      e.preventDefault()
+      if(!image){
+        toast.error('Thumbnail Not Selected')
+      }
+      const courseData = {
+        courseTitle,
+        courseDescription: quillRef.current.root.innerHTML,
+        coursePrice: Number(coursePrice),
+        discount:Number(discount),
+        courseContent: chapter,
+      }
+      const formData = new FormData()
+      formData.append('courseData',JSON.stringify(courseData))
+      formData.append('image',image)
+
+      const token = await getToken()
+      const {data} =await axios.post(backendUrl + '/api/educator/add-course' , formData, {headers: {Authorization: `Bearer ${token}`}})
+
+      if (data.success){
+        toast.success(data.message)
+        setCourseTitle('')
+        setCoursePrice(0)
+        setDiscount(0)
+        setImage(null)
+        setChapters([])
+        quillRef.current.root.innerHTML= " "
+
+      }else{
+        toast.error(data.message)
+      }
+
+    } catch (error) {
+       toast.error(error.message)
+    }
+    
   };
 
   useEffect(()=>{
@@ -106,7 +145,7 @@ const AddCourse = () => {
         <form onSubmit={handleSubmit} className='flex flex-col gap-4 max-w-md w-full text-gray-500'>
           <div className='flex flex-col gap-1'>
             <p>Course Title</p>
-            <input onChange={e => setCourseTitle(e.tartget.value)} value={courseTitle}type='text' placeholder='Type here' className='outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500'required/>
+            <input onChange={e => setCourseTitle(e.target.value)} value={courseTitle}type='text' placeholder='Type here' className='outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500'required/>
           </div>
           <div className='flex flex-col gap-1'>
             <p>Course Description</p>
@@ -116,20 +155,21 @@ const AddCourse = () => {
           <div className='flex items-center justify-between flex-wrap'>
             <div className='flex flex-col gap-1'>
               <p>Course price</p>
-              <input onChange={e=> setCoursePrice(e.target.value)}value={coursePrice} type='number'placeholder='0' className='outline-none md:py-2.5 py-2 w-28 px-3 rounded border border-gray-500' required/>
+              <input onChange={e=> setCoursePrice(Number(e.target.value))}value={coursePrice} type='number'placeholder='0' className='outline-none md:py-2.5 py-2 w-28 px-3 rounded border border-gray-500' required/>
             </div>
           <div className='flex md:flex-row flex-col items-center gap-3'>
             <p>Course Thumbnail</p>
-            <label htmlFor='thumbnaillImage'className='flex items-center gap-3'>
+            <label htmlFor='thumbnailImage'className='flex items-center gap-3'>
               <img src={assets.file_upload_icon} alt='' className='p-3 bg-blue-500 rounded'/>
-              <input type='file' id='thumbnailImage' onChange={e=> setImage(e.target.files[0])} accept='image/*'hidden/>
+              <input type='file' 
+              id='thumbnailImage' onChange={e=> setImage(e.target.files[0])} accept='image/*'hidden/>
               <img className='max-h-10' src={image ? URL.createObjectURL(image): ''}alt=''/>
             </label>
           </div>
           </div>
           <div className='flex flex-col gap-1'>
             <p>Discount %</p>
-            <input onChange={e=> setDiscount(e.target.value)} value={discount} type='number' placeholder='0' min={100} className='outline-none md:py-2.5 py-2 w-28 px-3 rounded border border-gray-500'required/>
+            <input onChange={e=> setDiscount(Number(e.target.value))} value={discount} type='number' placeholder='0' min={0} max={100} className='outline-none md:py-2.5 py-2 w-28 px-3 rounded border border-gray-500'required/>
           </div>
 
           {/* add chapter and lectures */}
@@ -141,9 +181,9 @@ const AddCourse = () => {
                      {/* <img src={assets.cross_icon} alt='' onClick={()=>handleLecture('remove',chapter.chapterId,lectureIndex)} className='cursor-pointer'/> */}
                     <img onClick={()=> handleChapter('toggle', chapter.chapterId)}
                      src={assets.dropdown_icon} width={14} alt='' className={`mr-2 cursor-pointer transition-all ${chapter.collapsed && '-rotate-90'}`}/>
-                    <span className='font-semibold'>{chapterIndex + 1}{chapter.chapterTitle}</span>
+                    <span className='font-semibold'>{chapterIndex + 1}. {chapter.chapterTitle}</span>
                   </div>
-                  <span className='text-gray-500'>{chapter.chapterContent.lenght}Lectures</span>
+                  <span className='text-gray-500'>{chapter.chapterContent.length}Lectures</span>
                   <img onClick={()=> handleChapter('remove', chapter.chapterId)} 
                   src={assets.cross_icon} alt='' className='cursor-pointer'/>
                 </div>
@@ -192,7 +232,7 @@ const AddCourse = () => {
                     <input 
                     type='text'
                     className='mt-1 block w-full border rounded py-1 px-2'
-                    value={lectureDetails.lectureURL}
+                    value={lectureDetails.lectureUrl}
                     onChange={(e)=> setLectureDetails({ ...lectureDetails, lectureUrl: e.target.value})}
                     />
                   </div>
