@@ -1,6 +1,6 @@
 import express from 'express'
 import { addcourse, educatorDashboardData, getEducatorCourses, getEnrolledStudentsData, updateRoleToEducator } from "../controllers/educatorController.js"
-import { protectEducator } from '../middlewares/authmiddleware.js'
+import { protectEducator } from '../middlewares/authMiddleware.js'
 import upload from '../configs/multer.js'
 
 
@@ -18,5 +18,3 @@ educatorRouter.get('/enrolled-students', protectEducator, getEnrolledStudentsDat
 
 export default educatorRouter;
 
-// http://localhost:5000/api/educator/add-course
-// http://localhost:5000/api/educator/course
