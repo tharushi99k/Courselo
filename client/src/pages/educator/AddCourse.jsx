@@ -168,8 +168,7 @@ const AddCourse = () => {
 
         <div className="flex items-center justify-between flex-wrap">
           <div className="flex flex-col gap-1">
-            <p>Course price</p>
-            {/* <input onChange={e=> setCoursePrice(Number(e.target.value))}value={coursePrice} type='number'placeholder='0' className='outline-none md:py-2.5 py-2 w-28 px-3 rounded border border-gray-500' required/> */}
+            <p>Course price</p>           
             <input
               type="number"
               placeholder="0"
@@ -203,17 +202,7 @@ const AddCourse = () => {
           </div>
         </div>
         <div className="flex flex-col gap-1">
-          <p>Discount %</p>
-          {/* <input
-            onChange={(e) => setDiscount(Number(e.target.value))}
-            value={discount}
-            type="number"
-            placeholder="0"
-            min={0}
-            max={100}
-            className="outline-none md:py-2.5 py-2 w-28 px-3 rounded border border-gray-500"
-            required
-          /> */}
+          <p>Discount %</p>         
           <input
             type="number"
             placeholder="0"
