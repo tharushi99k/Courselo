@@ -8,13 +8,13 @@ Courselo is a full-featured **Learning Management System** that allows educators
 
 ## 🚀 Features  
 
-- 👩‍🏫 **Educator Dashboard** – Manage courses, students, and earnings.  
-- 🎓 **Student Dashboard** – Access enrolled courses & track progress.  
-- 📚 **Course Management** – Add, update, and delete courses with thumbnails and pricing.  
-- 💳 **Payments** – Integrated with **Stripe** for secure transactions.  
-- ⭐ **Ratings & Reviews** – Students can rate and review courses.  
-- 🔐 **Authentication** – Role-based login (Educator / Student).  
-- 📊 **Earnings & Analytics** – Insights into revenue and course performance.  
+-  **Educator Dashboard** – Manage courses, students, and earnings.  
+-  **Student Dashboard** – Access enrolled courses & track progress.  
+-  **Course Management** – Add, update, and delete courses with thumbnails and pricing.  
+-  **Payments** – Integrated with **Stripe** for secure transactions.  
+-  **Ratings & Reviews** – Students can rate and review courses.  
+-  **Authentication** – Role-based login (Educator / Student).  
+-  **Earnings & Analytics** – Insights into revenue and course performance.  
 
 ---
 
