@@ -18,10 +18,10 @@ const Dashboard = () => {
       if(data.success){
         setDashboardData(data.dashboardData)
       }else{
-        toast.error(data.messege)
+        toast.error(data.message)
       }
     } catch (error) {
-      toast.error(error.messege)
+      toast.error(error.messeage)
     }
   }
 

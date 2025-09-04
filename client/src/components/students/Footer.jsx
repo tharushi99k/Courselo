@@ -1,4 +1,4 @@
-import { assert } from 'console'
+// import { assert } from 'console'
 import React from 'react'
 import { assets } from '../../assets/assets'
 
@@ -8,7 +8,7 @@ const Footer = () => {
     <div className='flex flex-col md:flex-row items-start px-8 md:px-0 justify-center gap-10 md:gap-32 py-10 border-b border-white/30'>
       <div className='flex flex-col md:items-start items-center w-full'>
         <img src={assets.logo_dark} alt='logo'/>
-        <p className='mt-6 text-center md:text-left text-sm text-white/80'>Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industry's standard dummy text</p>
+        <p className='mt-6 text-center md:text-left text-sm text-white/80'> Learn anytime, anywhere with expertly designed courses, interactive lessons, and personalized learning paths. Join thousands of learners advancing their careers and unlocking new opportunities.</p>
       </div>
       <div className='flex flex-col md:items-start items-center w-full'>
       <h2 className='font-semibold text-white mb-5'>Company</h2>

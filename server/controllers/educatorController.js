@@ -64,44 +64,47 @@ export const getEducatorCourses = async (req, res)=>{
 }
 
 // get educator dshboard data (total earning, enrolled students,No. of Courses)
-export const educatorDashboardData = async (req, res)=>{
-    try{
-        const educator = req.auth.userId;
-        const courses = await Course.find({educator})
-        const totalCourses = courses.length;
+export const educatorDashboardData = async (req, res) => {
+  try {
+    const educator = req.auth.userId;
+    const courses = await Course.find({ educator });
+    const totalCourses = courses.length;
 
-        const courseIds = courses.map(course => course._id);
+    const courseIds = courses.map((course) => course._id);
 
-        //calculate total earning from purchases
-        const purchases = await Purchase.find({
-            courseId: {$in: courseIds},
-            status: 'completed'
+    // Calculate total earning from purchases
+    const purchases = await Purchase.find({
+      courseId: { $in: courseIds },
+      status: "completed",
+    });
+    const totalEarnings = purchases.reduce((sum, purchase) => sum + purchase.amount, 0);
+
+    // Collect unique enrolled students with course title
+    const enrolledStudentsData = [];
+    for (const course of courses) {
+      const students = await User.find(
+        { _id: { $in: course.enrolledStudents } },
+        "name imageUrl"
+      );
+
+      students.forEach((student) => {
+        enrolledStudentsData.push({
+          courseTitle: course.courseTitle,
+          student,
         });
-        const totalEarnings = purchases.reduce((sum, Purchase)=> sum + purchase.amount, 0);
-
-        // collect unique enrolled student ids with their course title
-        const enrolledStudentsData = [];
-        for (const course of courses){
-            const students = await User.find({
-            _id: {$in: course.enrolledStudents}
-            }, 'name imageUrl');
-
-            students.forEach(student =>{
-            enrolledStudentsData.push({
-            courseTitle: course.courseTitle,
-            student
-            });
-            });
-        }
-        res.json({success:true,dashboardData: {
-        totalEarnings, enrolledStudentsData, totalCourses
-        }})
-
-
-    }catch(error){
-
+      });
     }
-}
+
+    res.json({
+      success: true,
+      dashboardData: { totalEarnings, enrolledStudentsData, totalCourses },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 
 // get enrolled students data with purchase data
 export const getEnrolledStudentsData = async (req, res)=>{
